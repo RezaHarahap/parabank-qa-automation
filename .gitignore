@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# Node / Cypress
+node_modules/
+cypress/videos/
+cypress/screenshots/
+
+# Local secrets and environment files
+.env
+.env.*
+!.env.example
+
+# Generated reports/results: selectively commit sanitized evidence instead
+results/*.html
+results/*.jtl
+results/*.csv
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
