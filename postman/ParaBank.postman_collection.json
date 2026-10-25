@@ -1,0 +1,74 @@
+{
+  "info": {
+    "_postman_id": "e0af58f2-5b34-4a49-914b-de36e58e2e21",
+    "name": "ParaBank QA Portfolio - API Discovery Smoke",
+    "description": "Safe initial API discovery checks. Login/customer endpoints are intentionally omitted until the current OpenAPI contract and a disposable demo account are verified. Do not use real credentials.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://parabank.parasoft.com/parabank"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Service index",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/html,application/json,*/*"
+          }
+        ],
+        "url": "{{baseUrl}}/services"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Service index returns a successful or redirect response', function () {",
+              "  pm.expect(pm.response.code).to.be.oneOf([200, 301, 302, 307, 308]);",
+              "});",
+              "pm.test('Response time is recorded', function () { pm.expect(pm.response.responseTime).to.be.a('number'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - OpenAPI document discovery (verify path against service index)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/services/bank/openapi.json"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('OpenAPI document endpoint responds successfully', function () { pm.expect(pm.response.code).to.equal(200); });",
+              "pm.test('Response body is valid JSON', function () { pm.expect(() => pm.response.json()).to.not.throw(); });",
+              "if (pm.response.code === 200) {",
+              "  const schema = pm.response.json();",
+              "  pm.test('Document resembles an OpenAPI/Swagger schema', function () {",
+              "    pm.expect(schema).to.have.any.keys('openapi', 'swagger');",
+              "  });",
+              "}"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "parabank-cypress-qa",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cypress regression tests for the ParaBank demo",
+  "scripts": {"cy:open": "cypress open", "cy:run": "cypress run"},
+  "devDependencies": {"cypress": "^14.0.0"}
+}
